@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIRS Skorlaması</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-4">Sepsis İçin SIRS Skorlaması</h1>
+        <form id="sirs-form" class="mt-4">
+            <div class="mb-3">
+                <label for="temperature" class="form-label">Vücut Sıcaklığı (°C)</label>
+                <input type="number" class="form-control" id="temperature" placeholder="Sıcaklık giriniz">
+            </div>
+            <div class="mb-3">
+                <label for="heart-rate" class="form-label">Nabız (dakikadaki atım sayısı)</label>
+                <input type="number" class="form-control" id="heart-rate" placeholder="Nabız giriniz">
+            </div>
+            <div class="mb-3">
+                <label for="respiratory-rate" class="form-label">Solunum Hızı (dakikadaki nefes sayısı)</label>
+                <input type="number" class="form-control" id="respiratory-rate" placeholder="Solunum hızı giriniz">
+            </div>
+            <div class="mb-3">
+                <label for="wbc" class="form-label">Beyaz Küre Sayısı (10^3/mcL)</label>
+                <input type="number" class="form-control" id="wbc" placeholder="Beyaz küre sayısı giriniz">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="calculateSIRS()">Skor Hesapla</button>
+        </form>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script>
+        function calculateSIRS() {
+            // Kullanıcıdan alınan değerleri çekelim
+            const temp = parseFloat(document.getElementById("temperature").value);
+            const heartRate = parseInt(document.getElementById("heart-rate").value);
+            const respRate = parseInt(document.getElementById("respiratory-rate").value);
+            const wbc = parseFloat(document.getElementById("wbc").value);
+
+            // SIRS kriterlerini değerlendirme
+            let sirsScore = 0;
+
+            if (temp < 36 || temp > 38) sirsScore++;
+            if (heartRate > 90) sirsScore++;
+            if (respRate > 20) sirsScore++;
+            if (wbc < 4 || wbc > 12) sirsScore++;
+
+            // Sonuçları ekranda göster
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `<h3>SIRS Skoru: ${sirsScore}</h3>`;
+            
+            if (sirsScore >= 2) {
+                resultDiv.innerHTML += `<p class="text-danger">Sepsis riski var!</p>`;
+            } else {
+                resultDiv.innerHTML += `<p class="text-success">Sepsis riski düşük.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
